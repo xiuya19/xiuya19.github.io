@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>import和require | 月夜静翼的天文台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ES6之前已经出现了js模块加载的方案，最主要的是CommonJS和AMD规范。 commonjs主要应用于服务器，实现同步加载，如nodejs。 AMD规范应用于浏览器，如requirejs，为异步加载。 同时还有CMD规范，为同步加载方案如seaJS。 require&#x2F;exports填补了JS没有模块的空缺，它的目标是让JS不止在浏览器中运行，可以在各个地方都能运行，或者说是提供一个类似Pyt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="import和require">
+<meta property="og:url" content="http://example.com/2020/08/07/import%E5%92%8Crequire/index.html">
+<meta property="og:site_name" content="月夜静翼的天文台">
+<meta property="og:description" content="ES6之前已经出现了js模块加载的方案，最主要的是CommonJS和AMD规范。 commonjs主要应用于服务器，实现同步加载，如nodejs。 AMD规范应用于浏览器，如requirejs，为异步加载。 同时还有CMD规范，为同步加载方案如seaJS。 require&#x2F;exports填补了JS没有模块的空缺，它的目标是让JS不止在浏览器中运行，可以在各个地方都能运行，或者说是提供一个类似Pyt">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-07T04:00:42.000Z">
+<meta property="article:modified_time" content="2020-08-10T03:02:00.391Z">
+<meta property="article:author" content="月夜静翼">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="月夜静翼的天文台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">月夜静翼的天文台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-import和require" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/07/import%E5%92%8Crequire/" class="article-date">
+  <time datetime="2020-08-07T04:00:42.000Z" itemprop="datePublished">2020-08-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      import和require
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ES6之前已经出现了js模块加载的方案，最主要的是CommonJS和AMD规范。</p>
+<p>commonjs主要应用于服务器，实现同步加载，如nodejs。</p>
+<p>AMD规范应用于浏览器，如requirejs，为异步加载。</p>
+<p>同时还有CMD规范，为同步加载方案如seaJS。</p>
+<h1 id="require-exports"><a href="#require-exports" class="headerlink" title="require/exports"></a>require/exports</h1><p>填补了JS没有模块的空缺，它的目标是让JS不止在浏览器中运行，可以在各个地方都能运行，或者说是提供一个类似Python，Ruby和Java标准库。</p>
+<p>而NodeJS是以CommonJS规范实现，Webpack也是以CommonJS规范书写的</p>
+<ul>
+<li>node.js的模块系统，就是参照CommonJS规范实现的。在CommonJS中，有一个全局性方法require()，用于加载模块。</li>
+<li>CommonJS定义的模块分为:{模块引用(require)} {模块定义(exports)} {模块标识(module)}</li>
+</ul>
+<h1 id="import-export"><a href="#import-export" class="headerlink" title="import/export"></a>import/export</h1><p>ES6在语言规格的层面上，实现了模块功能，而且实现得相当简单，完全可以取代现有的CommonJS和AMD规范，成为浏览器和服务器通用的模块解决方案。</p>
+<p>ES6模块主要有两个功能：export和import</p>
+<p>export用于对外输出本模块（一个文件可以理解为一个模块）变量的接口</p>
+<p>import用于在一个模块中加载另一个含有export接口的模块。</p>
+<p>也就是说使用export命令定义了模块的对外接口以后，其他JS文件就可以通过import命令加载这个模块（文件）</p>
+<p>import的加载称为“编译时加载”或者静态加载，即 ES6 可以在编译时就完成模块加载，效率要比 CommonJS 模块的加载方式高。但是这样会造成import时无法动态加载</p>
+<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><ul>
+<li><p>遵循规范</p>
+<ul>
+<li>require 是 AMD规范引入方式</li>
+<li>import是es6的一个语法标准，如果要兼容浏览器的话必须转化成es5的语法</li>
+</ul>
+</li>
+<li><p>调用时间</p>
+<ul>
+<li>require是运行时调用，所以require理论上可以运用在代码的任何地方</li>
+<li>import是编译时调用，所以必须放在文件开头，且由于是编译时调用，因此无法动态加载</li>
+</ul>
+</li>
+<li><p>本质</p>
+<ul>
+<li>require是赋值过程，其实require的结果就是对象、数字、字符串、函数等，再把require的结果赋值给某个变量</li>
+<li>import是解构过程，但是目前所有的引擎都还没有实现import，我们在node中使用babel支持ES6，也仅仅是将ES6转码为ES5再执行，import语法会被转码为require</li>
+</ul>
+</li>
+</ul>
+<h1 id="是否可以混合着用"><a href="#是否可以混合着用" class="headerlink" title="是否可以混合着用"></a>是否可以混合着用</h1><p>按照规范<strong>module.exports =&gt;require，export=&gt;import</strong>，但是现在开发为了兼容低版本的JS引擎会对import进行降级处理，会把import转换成require；这样就造成了各种方法可以混合使用</p>
+<p>需要注意的是require是把所有模块加载进去，与import * 基本相同，但是import *会增加default属性。import需要指定模块名，如果不存在会返回undefined。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/08/07/import%E5%92%8Crequire/" data-id="ckqm2rzvf0002mct111puc1v3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/10/element-ui%E6%BA%90%E7%A0%81-clickoutside/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          element-ui源码-clickoutside
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/07/%E5%B1%9E%E6%80%A7%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%8A%B6%E6%80%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">属性描述符与对象状态</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/element-ui-%E6%BA%90%E7%A0%81/" rel="tag">element-ui 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yrm/" rel="tag">yrm</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/element-ui-%E6%BA%90%E7%A0%81/" style="font-size: 10px;">element-ui 源码</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/yarn/" style="font-size: 10px;">yarn</a> <a href="/tags/yrm/" style="font-size: 10px;">yrm</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/02/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/02/%E8%B7%A8%E5%9F%9F/">跨域</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/07/npm%E5%92%8Cyarn%E5%85%A8%E5%B1%80%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9%E5%92%8Cyrm%E4%BD%BF%E7%94%A8/">npm和yarn全局路径修改和yrm使用</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/10/element-ui%E6%BA%90%E7%A0%81-clickoutside/">element-ui源码-clickoutside</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/07/import%E5%92%8Crequire/">import和require</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 月夜静翼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
