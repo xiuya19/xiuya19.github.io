@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>mini-vue | 月夜静翼的天文台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简述 实现一个简洁版的Mini-Vue框架，该Vue包括三个模块  渲染系统模块 可响应式系统模块 应用程序入口模块  渲染系统实现渲染系统，该模块主要包含三个功能  功能一：h函数，用于返回一个VNode对象 功能二：mount函数，用于将VNode挂载到DOM上 功能三：patch函数，用于对两个VNode进行对比，决定如何处理新的VNode  h函数直接返回一个VNode对象即可 12345">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mini-vue">
+<meta property="og:url" content="http://example.com/2023/01/31/mini-vue/index.html">
+<meta property="og:site_name" content="月夜静翼的天文台">
+<meta property="og:description" content="简述 实现一个简洁版的Mini-Vue框架，该Vue包括三个模块  渲染系统模块 可响应式系统模块 应用程序入口模块  渲染系统实现渲染系统，该模块主要包含三个功能  功能一：h函数，用于返回一个VNode对象 功能二：mount函数，用于将VNode挂载到DOM上 功能三：patch函数，用于对两个VNode进行对比，决定如何处理新的VNode  h函数直接返回一个VNode对象即可 12345">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-31T03:19:18.000Z">
+<meta property="article:modified_time" content="2023-01-31T03:28:51.196Z">
+<meta property="article:author" content="月夜静翼">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="源码">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="月夜静翼的天文台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">月夜静翼的天文台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mini-vue" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/01/31/mini-vue/" class="article-date">
+  <time datetime="2023-01-31T03:19:18.000Z" itemprop="datePublished">2023-01-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mini-vue
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>简述</p>
+<p>实现一个简洁版的Mini-Vue框架，该Vue包括三个模块</p>
+<ul>
+<li>渲染系统模块</li>
+<li>可响应式系统模块</li>
+<li>应用程序入口模块</li>
+</ul>
+<h1 id="渲染系统实现"><a href="#渲染系统实现" class="headerlink" title="渲染系统实现"></a>渲染系统实现</h1><p>渲染系统，该模块主要包含三个功能</p>
+<ul>
+<li>功能一：h函数，用于返回一个VNode对象</li>
+<li>功能二：mount函数，用于将VNode挂载到DOM上</li>
+<li>功能三：patch函数，用于对两个VNode进行对比，决定如何处理新的VNode</li>
+</ul>
+<h2 id="h函数"><a href="#h函数" class="headerlink" title="h函数"></a>h函数</h2><p>直接返回一个VNode对象即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">h</span> = (<span class="params">tag, props, children</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    tag,</span><br><span class="line">    props,</span><br><span class="line">    children</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Mount函数"><a href="#Mount函数" class="headerlink" title="Mount函数"></a>Mount函数</h2><ul>
+<li>根据tag，创建HTML元素，并且存储到vnode的el中</li>
+<li>处理props属性<ul>
+<li>如果以on开头，那么监听事件</li>
+<li>普通属性直接通过 setAttribute 添加即可</li>
+</ul>
+</li>
+<li>处理子节点<ul>
+<li>如果是字符串节点，那么直接设置textContent</li>
+<li>如果是数组节点，那么遍历调用 mount 函数</li>
+</ul>
+</li>
+<li>挂载vnode到指定元素</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">mount</span> = (<span class="params">vnode, container</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// vnode -&gt; element</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> el = vnode.<span class="property">el</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(vnode.<span class="property">tag</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 遍历props 存储到dom元素上</span></span><br><span class="line">  <span class="keyword">if</span> (vnode.<span class="property">props</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> key <span class="keyword">in</span> vnode.<span class="property">props</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> value = vnode.<span class="property">props</span>[key]</span><br><span class="line">      <span class="comment">// 监听事件</span></span><br><span class="line">      <span class="keyword">if</span> (key.<span class="title function_">startsWith</span>(<span class="string">&#x27;on&#x27;</span>)) &#123;</span><br><span class="line">        el.<span class="title function_">addEventListener</span>(key.<span class="title function_">slice</span>(<span class="number">2</span>).<span class="title function_">toLowerCase</span>(), value)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        el.<span class="title function_">setAttribute</span>(key, value)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (vnode.<span class="property">children</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果是text文本直接存入textContent</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> vnode.<span class="property">children</span> === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">      el.<span class="property">textContent</span> = vnode.<span class="property">children</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 递归</span></span><br><span class="line">      vnode.<span class="property">children</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">mount</span>(item, el)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  container.<span class="title function_">appendChild</span>(el)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="patch"><a href="#patch" class="headerlink" title="patch"></a>patch</h2><p>patch函数的实现，分为两种情况</p>
+<ul>
+<li>n1和n2是不同类型的节点：<ul>
+<li>找到n1的el父节点，删除原来的n1节点的el</li>
+<li>挂载n2节点到n1的el父节点上；</li>
+</ul>
+</li>
+<li>n1和n2节点是相同的节点：<ul>
+<li>处理props的情况<ul>
+<li>先将新节点的props全部挂载到el上；</li>
+<li>判断旧节点的props是否不需要在新节点上，如果不需要，那么删除对应的属性；</li>
+</ul>
+</li>
+<li>处理children的情况<ul>
+<li>如果新节点是一个字符串类型，那么直接调用 el.textContent = newChildren</li>
+</ul>
+</li>
+<li>如果新节点不同一个字符串类型：<ul>
+<li>旧节点是一个字符串类型<ul>
+<li>将el的textContent设置为空字符串；</li>
+<li>就节点是一个字符串类型，那么直接遍历新节点，挂载到el上；</li>
+</ul>
+</li>
+<li>旧节点也是一个数组类型<ul>
+<li>取出数组的最小长度；</li>
+<li>遍历所有的节点，新节点和旧节点进行path操作；</li>
+<li>如果新节点的length更长，那么剩余的新节点进行挂载操作；</li>
+<li>如果旧节点的length更长，那么剩余的旧节点进行卸载操作；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">patch</span> = (<span class="params">n1, n2</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// tag不相同直接移除</span></span><br><span class="line">  <span class="keyword">if</span> (n1.<span class="property">tag</span> !== n2.<span class="property">tag</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> n1ElParent = n1.<span class="property">el</span>.<span class="property">parentElement</span></span><br><span class="line">    n1ElParent.<span class="title function_">removeChild</span>(n1.<span class="property">el</span>) <span class="comment">// 移除</span></span><br><span class="line">    <span class="title function_">mount</span>(n2, n1ElParent) <span class="comment">// 重新挂载</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 取出element对象 并保存到n2中</span></span><br><span class="line">    <span class="keyword">const</span> el = n2.<span class="property">el</span> = n1.<span class="property">el</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理props</span></span><br><span class="line">    <span class="keyword">const</span> oldProps = n1.<span class="property">props</span> || &#123;&#125;</span><br><span class="line">    <span class="keyword">const</span> newProps = n2.<span class="property">props</span> || &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加新的props</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> newProps) &#123;</span><br><span class="line">      <span class="keyword">const</span> oldValue = oldProps[key]</span><br><span class="line">      <span class="keyword">const</span> newValue = newProps[key]</span><br><span class="line">      <span class="keyword">if</span> (oldValue !== newValue &amp;&amp; newValue !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key.<span class="title function_">startsWith</span>(<span class="string">&#x27;on&#x27;</span>)) &#123;</span><br><span class="line">          <span class="comment">// 卸载之前的监听</span></span><br><span class="line">          el.<span class="title function_">removeEventListener</span>(key.<span class="title function_">slice</span>(<span class="number">2</span>).<span class="title function_">toLowerCase</span>(), oldValue)</span><br><span class="line">          el.<span class="title function_">addEventListener</span>(key.<span class="title function_">slice</span>(<span class="number">2</span>).<span class="title function_">toLowerCase</span>(), newValue)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          el.<span class="title function_">setAttribute</span>(key, newValue)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 移除旧的props</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> oldProps) &#123;</span><br><span class="line">      <span class="keyword">const</span> value = oldProps[key]</span><br><span class="line">      <span class="comment">// 如果是事件的话直接卸载</span></span><br><span class="line">      <span class="keyword">if</span> (key.<span class="title function_">startsWith</span>(<span class="string">&#x27;on&#x27;</span>)) &#123;</span><br><span class="line">        el.<span class="title function_">removeEventListener</span>(key.<span class="title function_">slice</span>(<span class="number">2</span>).<span class="title function_">toLowerCase</span>(), value)</span><br><span class="line">      &#125; </span><br><span class="line">      <span class="keyword">if</span> (!(key <span class="keyword">in</span> newProps)) &#123;</span><br><span class="line">        el.<span class="title function_">removeAttribute</span>(key, value)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理children</span></span><br><span class="line">    <span class="keyword">const</span> oldChildren = n1.<span class="property">children</span> || []</span><br><span class="line">    <span class="keyword">const</span> newChildren = n2.<span class="property">children</span> || []</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果新节点是字符串</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> newChildren === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">      <span class="comment">// 如果旧节点也是字符串</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> oldChildren === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">        <span class="comment">// 仅在不相等时赋值</span></span><br><span class="line">        <span class="keyword">if</span> (newChildren !== oldChildren) &#123;</span><br><span class="line">          el.<span class="property">textContent</span> = newChildren</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        el.<span class="property">innerHtml</span> = newChildren</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> oldChildren === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">        el.<span class="property">innerHtml</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        newChildren.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="title function_">mount</span>(item, el)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> commonLength = <span class="title class_">Math</span>.<span class="title function_">min</span>(oldChildren.<span class="property">length</span>, newChildren.<span class="property">length</span>)</span><br><span class="line">        <span class="comment">// 考虑没有key的操作 无优化</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; commonLength; i += <span class="number">1</span>) &#123;</span><br><span class="line">          <span class="title function_">patch</span>(oldChildren[i], newChildren[i])</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (newChildren.<span class="property">length</span> &gt; oldChildren.<span class="property">length</span>) &#123;</span><br><span class="line">          newChildren.<span class="title function_">slice</span>(oldChildren.<span class="property">length</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">mount</span>(item, el)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (newChildren.<span class="property">length</span> &lt; oldChildren.<span class="property">length</span>) &#123;</span><br><span class="line">          oldChildren.<span class="title function_">slice</span>(newChildren.<span class="property">length</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">            el.<span class="title function_">removeChild</span>(item.<span class="property">el</span>)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="依赖收集系统"><a href="#依赖收集系统" class="headerlink" title="依赖收集系统"></a>依赖收集系统</h1><h2 id="响应式系统Vue2实现"><a href="#响应式系统Vue2实现" class="headerlink" title="响应式系统Vue2实现"></a>响应式系统Vue2实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Map(&#123;key: value&#125;): key是一个字符串</span></span><br><span class="line"><span class="comment">// WeakMap(&#123;key(对象): value&#125;): key是一个对象, 弱引用</span></span><br><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局存储依赖 方便获取</span></span><br><span class="line"><span class="keyword">let</span> activeEffect = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dep</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">subscribers</span> = <span class="keyword">new</span> <span class="title class_">Set</span>()</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">depend</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (activeEffect) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">subscribers</span>.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">notify</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">subscribers</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">effect</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">effect</span>()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getDep</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">  <span class="comment">// 1.根据对象(target)取出对应的Map对象</span></span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line">    targetMap.<span class="title function_">set</span>(target, depsMap)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 2.取出具体的dep对象</span></span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    dep = <span class="keyword">new</span> <span class="title class_">Dep</span>()</span><br><span class="line">    depsMap.<span class="title function_">set</span>(key, dep)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> dep</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">watchEffect</span>(<span class="params">effect</span>) &#123;</span><br><span class="line">  activeEffect = effect</span><br><span class="line">  <span class="title function_">effect</span>()</span><br><span class="line">  activeEffect = <span class="literal">null</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// vue2对raw进行数据劫持</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">raw</span>) &#123;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(raw).<span class="title function_">forEach</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="title function_">getDep</span>(raw, key)</span><br><span class="line">    <span class="keyword">let</span> value = raw[key]</span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(raw, key, &#123;</span><br><span class="line">      <span class="title function_">get</span>(<span class="params"></span>) &#123;</span><br><span class="line">        dep.<span class="title function_">depend</span>()</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="title function_">set</span>(<span class="params">newValue</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (value !== newValue) &#123;</span><br><span class="line">          value = newValue;</span><br><span class="line">          dep.<span class="title function_">notify</span>();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> raw</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------下面是测试代码</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> info = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">counter</span>: <span class="number">10</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> foo = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">height</span>: <span class="number">12.3</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dep = <span class="keyword">new</span> <span class="title class_">Dep</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// watchEffect1</span></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;effect1:&quot;</span>, info.<span class="property">counter</span> * <span class="number">2</span>, info.<span class="property">name</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// watchEffect2</span></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;effect2:&quot;</span>, info.<span class="property">counter</span> * info.<span class="property">counter</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// watchEffect3</span></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;effect3:&quot;</span>, info.<span class="property">counter</span> + <span class="number">10</span>, info.<span class="property">name</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;effect4:&quot;</span>, foo.<span class="property">height</span>, info.<span class="property">name</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">info.<span class="property">counter</span> += <span class="number">1</span></span><br><span class="line"><span class="comment">// dep.notify()</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// info.name = &#x27;李四&#x27;</span></span><br><span class="line"><span class="comment">// dep.notify()</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应式系统Vue3实现"><a href="#响应式系统Vue3实现" class="headerlink" title="响应式系统Vue3实现"></a>响应式系统Vue3实现</h2><p>与vue2中不同是，vue3使用proxy劫持对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">raw</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(raw, &#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params">target, key, receiver</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> dep = <span class="title function_">getDep</span>(raw, key)</span><br><span class="line">      dep.<span class="title function_">depend</span>()</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> dep = <span class="title function_">getDep</span>(raw, key)</span><br><span class="line">      <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver)</span><br><span class="line">      dep.<span class="title function_">notify</span>()</span><br><span class="line">      <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用proxy的原因"><a href="#使用proxy的原因" class="headerlink" title="使用proxy的原因"></a>使用proxy的原因</h2><ul>
+<li>Object.definedProperty 是劫持对象的属性时，如果新增元素<ul>
+<li>那么Vue2需要再次 调用definedProperty，而 Proxy 劫持的是整个对象，不需要做特殊处理</li>
+</ul>
+</li>
+<li>修改对象的不同<ul>
+<li>使用 defineProperty 时，我们修改原来的 obj 对象就可以触发拦截</li>
+<li>而使用 proxy，就必须修改代理对象，即 Proxy 的实例才可以触发拦截</li>
+</ul>
+</li>
+<li>Proxy 能观察的类型比 defineProperty 更丰富<ul>
+<li>has：in操作符的捕获器</li>
+<li>deleteProperty：delete 操作符的捕捉器</li>
+<li>还有其他proxy的劫持器</li>
+</ul>
+</li>
+<li>Proxy 作为新标准将受到浏览器厂商重点持续的性能优化</li>
+<li>缺点：Proxy 不兼容IE，也没有 polyfill, defineProperty 能支持到IE9</li>
+</ul>
+<h1 id="应用程序入口模块"><a href="#应用程序入口模块" class="headerlink" title="应用程序入口模块"></a>应用程序入口模块</h1><p>从框架的层面来说，我们需要有两部分内容</p>
+<ul>
+<li>createApp用于创建一个app对象</li>
+<li>该app对象有一个mount方法，可以将根组件挂载到某一个dom元素上</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createApp</span>(<span class="params">rootComponent</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="title function_">mount</span>(<span class="params">selector</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(selector);</span><br><span class="line">      <span class="keyword">let</span> isMounted = <span class="literal">false</span>;</span><br><span class="line">      <span class="keyword">let</span> oldVNode = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">      <span class="title function_">watchEffect</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isMounted) &#123;</span><br><span class="line">          oldVNode = rootComponent.<span class="title function_">render</span>();</span><br><span class="line">          <span class="title function_">mount</span>(oldVNode, container);</span><br><span class="line">          isMounted = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> newVNode = rootComponent.<span class="title function_">render</span>();</span><br><span class="line">          <span class="title function_">patch</span>(oldVNode, newVNode);</span><br><span class="line">          oldVNode = newVNode;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/01/31/mini-vue/" data-id="cldjpl1u6000ij0t4gjlecdcy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/01/31/npm%E4%B8%8Eyarn/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          npm与yarn
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/01/31/js%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">js中的异步</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/element-ui/" rel="tag">element-ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/router/" rel="tag">router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE/" rel="tag">配置</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/element-ui/" style="font-size: 10px;">element-ui</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/vue/" style="font-size: 17.5px;">vue</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 10px;">模块化</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 12.5px;">浏览器</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 15px;">源码</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/01/31/js%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%8A%B6%E6%80%81/">js中属性描述符与对象状态</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/">事件循环</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/js%E4%B8%AD%E7%9A%84%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/">js中的浅拷贝与深拷贝</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/%E9%89%B4%E6%9D%83%E5%92%8C%E5%9C%A8node%E4%B8%8A%E7%9A%84%E5%AE%9E%E7%8E%B0/">鉴权和在node上的实现</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%EF%BC%88GC%EF%BC%89/">垃圾回收机制（GC）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 月夜静翼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

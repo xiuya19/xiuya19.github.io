@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>vuex | 月夜静翼的天文台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="状态管理什么是状态管理在开发中，我们会的应用程序需要处理各种各样的数据，这些数据需要保存在我们应用程序中的某一个位置，对于这些数据的管理我们就称之为是 状态管理。 在Vue开发中，我们使用组件化的开发方式而在组件中我们定义data或者在setup中返回使用的数据，这些数据我们称之为state在模块template中我们可以使用这些数据，模块最终会被渲染成DOM，我们称之为View在模块中我们会产生">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vuex">
+<meta property="og:url" content="http://example.com/2023/01/31/vuex/index.html">
+<meta property="og:site_name" content="月夜静翼的天文台">
+<meta property="og:description" content="状态管理什么是状态管理在开发中，我们会的应用程序需要处理各种各样的数据，这些数据需要保存在我们应用程序中的某一个位置，对于这些数据的管理我们就称之为是 状态管理。 在Vue开发中，我们使用组件化的开发方式而在组件中我们定义data或者在setup中返回使用的数据，这些数据我们称之为state在模块template中我们可以使用这些数据，模块最终会被渲染成DOM，我们称之为View在模块中我们会产生">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/01/31/vuex/vuex-cycle.png">
+<meta property="article:published_time" content="2023-01-31T03:20:19.000Z">
+<meta property="article:modified_time" content="2023-01-31T03:39:17.071Z">
+<meta property="article:author" content="月夜静翼">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/01/31/vuex/vuex-cycle.png">
+  
+    <link rel="alternate" href="/atom.xml" title="月夜静翼的天文台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">月夜静翼的天文台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-vuex" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/01/31/vuex/" class="article-date">
+  <time datetime="2023-01-31T03:20:19.000Z" itemprop="datePublished">2023-01-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vuex
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h1><h2 id="什么是状态管理"><a href="#什么是状态管理" class="headerlink" title="什么是状态管理"></a>什么是状态管理</h2><p>在开发中，我们会的应用程序需要处理各种各样的数据，这些数据需要保存在我们应用程序中的某一个位置，对于这些数据的管理我们就称之为是 状态管理。</p>
+<p>在Vue开发中，我们使用组件化的开发方式<br>而在组件中我们定义data或者在setup中返回使用的数据，这些数据我们称之为state<br>在模块template中我们可以使用这些数据，模块最终会被渲染成DOM，我们称之为View<br>在模块中我们会产生一些行为事件，处理这些行为事件时，有可能会修改state，这些行为事件我们称之为actions</p>
+<h2 id="复杂的状态管理"><a href="#复杂的状态管理" class="headerlink" title="复杂的状态管理"></a>复杂的状态管理</h2><p>JavaScript开发的应用程序，已经变得越来越复杂了：</p>
+<ul>
+<li>JavaScript需要管理的状态越来越多，越来越复杂；</li>
+<li>这些状态包括服务器返回的数据、缓存数据、用户操作产生的数据等等；</li>
+<li>也包括一些UI的状态，比如某些元素是否被选中，是否显示加载动效，当前分页；</li>
+</ul>
+<p>当我们的应用遇到多个组件共享状态时，单向数据流的简洁性很容易被破坏：</p>
+<ul>
+<li>多个视图依赖于同一状态；</li>
+<li>来自不同视图的行为需要变更同一状态；</li>
+</ul>
+<p>我们是否可以通过组件数据的传递来完成呢</p>
+<ul>
+<li>对于一些简单的状态，确实可以通过props的传递或者Provide的方式来共享状态</li>
+<li>但是对于复杂的状态管理来说，显然单纯通过传递和共享的方式是不足以解决问题的</li>
+</ul>
+<h2 id="vuex的状态管理"><a href="#vuex的状态管理" class="headerlink" title="vuex的状态管理"></a>vuex的状态管理</h2><p>管理不断变化的state本身是非常困难的</p>
+<ul>
+<li>状态之间相互会存在依赖，一个状态的变化会引起另一个状态的变化，View页面也有可能会引起状态的变化；</li>
+<li>当应用程序复杂时，state在什么时候，因为什么原因而发生了变化，发生了怎么样的变化，会变得非常难以控制和追踪；</li>
+</ul>
+<p>因此，我们是否可以考虑将组件的内部状态抽离出来</p>
+<ul>
+<li>在这种模式下，我们的组件树构成了一个巨大的 “试图View”</li>
+<li>不管在树的哪个位置，任何组件都能获取状态或者触发行为</li>
+<li>通过定义和隔离状态管理中的各个概念，并通过强制性的规则来维护视图和状态间的独立性，我们的代码边会变得更加结构化和易于维护、跟踪</li>
+</ul>
+<p>这就是Vuex背后的基本思想，它借鉴了Flux、Redux、Elm（纯函数语言，redux有借鉴它的思想）</p>
+<h1 id="vuex"><a href="#vuex" class="headerlink" title="vuex"></a>vuex</h1><p>每一个Vuex应用的核心就是store（仓库），store本质上是一个容器，它包含着你的应用中大部分的状态（state）</p>
+<h2 id="vuex状态管理概述"><a href="#vuex状态管理概述" class="headerlink" title="vuex状态管理概述"></a>vuex状态管理概述</h2><p><img src="/2023/01/31/vuex/vuex-cycle.png"></p>
+<h3 id="单一状态树"><a href="#单一状态树" class="headerlink" title="单一状态树"></a>单一状态树</h3><p>Vuex 使用单一状态树</p>
+<ul>
+<li>用一个对象就包含了全部的应用层级状；</li>
+<li>采用的是SSOT，Single Source of Truth，也可以翻译成单一数据源； p</li>
+<li>这也意味着，每个应用将仅仅包含一个 store 实例；</li>
+<li>单状态树和模块化并不冲突，后面我们会讲到module的概念</li>
+</ul>
+<p>单一状态树的优势</p>
+<ul>
+<li>如果你的状态信息是保存到多个Store对象中的，那么之后的管理和维护等等都会变得特别困难</li>
+<li>所以Vuex也使用了单一状态树来管理应用层级的全部状态</li>
+<li>单一状态树能够让我们最直接的方式找到某个状态的片段，而且在之后的维护和调试过程中，也可以非常方便的管理和维护</li>
+</ul>
+<h3 id="Vuex和单纯的全局对象的区别"><a href="#Vuex和单纯的全局对象的区别" class="headerlink" title="Vuex和单纯的全局对象的区别"></a>Vuex和单纯的全局对象的区别</h3><ul>
+<li>Vuex的状态存储是响应式的<ul>
+<li>当Vue组件从store中读取状态的时候，若store中的状态发生变化，那么相应的组件也会被更新</li>
+</ul>
+</li>
+<li>你不能直接改变store中的状态<ul>
+<li>改变store中的状态的唯一途径就显示提交 (commit) mutation</li>
+<li>这样使得我们可以方便的跟踪每一个状态的变化，从而让我们能够通过一些工具帮助我们更好的管理应用的状态</li>
+</ul>
+</li>
+</ul>
+<h2 id="store的创建"><a href="#store的创建" class="headerlink" title="store的创建"></a>store的创建</h2><p>使用和vue-router类似，创建store对象并让app注册</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建store</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>: &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span>: &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">modules</span>: &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js use-store</span></span><br><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">&#x27;./store&#x27;</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>).<span class="title function_">use</span>(store)</span><br></pre></td></tr></table></figure>
+
+<h2 id="state"><a href="#state" class="headerlink" title="state"></a>state</h2><h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><p>以<code>state.counter</code>为例</p>
+<ul>
+<li>在模板中可以使用<code>$store.state.counter</code></li>
+<li>在options api中可以使用<code>this.$store.state.counter</code></li>
+<li>在composition api中<ul>
+<li>可以通过<code>import &#123; useStore &#125; from &#39;vuex&#39;</code></li>
+<li><code>new useStore()</code>中获取</li>
+</ul>
+</li>
+<li>通过用mapState的辅助函数获取（需要获取较多state时可用）</li>
+</ul>
+<h3 id="composition-api中的批量映射"><a href="#composition-api中的批量映射" class="headerlink" title="composition api中的批量映射"></a>composition api中的批量映射</h3><p>默认情况下，Vuex并没有提供非常方便的使用mapState的方式，这里我们进行了一个函数的封装</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useStore, mapState &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; computed &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useState</span>(<span class="params">mapper</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> store = <span class="keyword">new</span> <span class="title function_">useStore</span>()</span><br><span class="line">  <span class="keyword">const</span> stateFns = <span class="title function_">mapState</span>(mapper)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> state = &#123;&#125;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(stateFns).<span class="title function_">forEach</span>(<span class="function">(<span class="params">fnKey</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// mapState中实际上是通过 this.$store.state获取状态</span></span><br><span class="line">    <span class="comment">// 但是目前取出的stateFns[fnKey]没有this，因此要通过bind绑定</span></span><br><span class="line">    <span class="keyword">const</span> fn = stateFns[fnKey].<span class="title function_">bind</span>(&#123; <span class="attr">$store</span>: store &#125;)</span><br><span class="line">    state[fnKey] = <span class="title function_">computed</span>(fn)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="getters"><a href="#getters" class="headerlink" title="getters"></a>getters</h2><h3 id="基本使用-1"><a href="#基本使用-1" class="headerlink" title="基本使用"></a>基本使用</h3><p>某些属性我们可能需要警告变化后来使用，这个时候可以使用getters<br>实际上类似于computed</p>
+<p>传入2个参数</p>
+<ul>
+<li>state：可以获取store中的state</li>
+<li>getters：可以获取所有getters</li>
+</ul>
+<p>另外可以通过返回一个函数 达到filter的效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">discount</span>: <span class="number">0.9</span>,</span><br><span class="line">    <span class="attr">books</span>: [</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&#x27;1&#x27;</span>, <span class="attr">price</span>: <span class="number">12</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&#x27;2&#x27;</span>, <span class="attr">price</span>: <span class="number">16</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&#x27;3&#x27;</span>, <span class="attr">price</span>: <span class="number">34</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span>: &#123;</span><br><span class="line">    <span class="title function_">booksTotalPrice</span>(<span class="params">state</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> state.<span class="property">books</span>.<span class="title function_">reduce</span>(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> pre + cur.<span class="property">price</span>, <span class="number">0</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 第二个参数可以获取getters</span></span><br><span class="line">    <span class="title function_">currentDiscount</span>(<span class="params">state, getters</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> (state.<span class="property">discount</span> * getters.<span class="property">booksTotalPrice</span>).<span class="title function_">toFixed</span>(<span class="number">2</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 可以通过返回函数达到filter的效果</span></span><br><span class="line">    <span class="title function_">filterTotalPrice</span>(<span class="params">state</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">lowerPrice</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> book <span class="keyword">of</span> state.<span class="property">books</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (book.<span class="property">price</span> &lt;= lowerPrice) sum += book.<span class="property">price</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2&gt;booksTotalPrice: &#123;&#123; $store.getters.booksTotalPrice &#125;&#125;&lt;/h2&gt;</span><br><span class="line">&lt;h2&gt;booksTotalPrice: &#123;&#123; $store.getters.currentDiscount &#125;&#125;&lt;/h2&gt;</span><br><span class="line">&lt;h2&gt;filterTotalPrice: &#123;&#123; $store.getters.filterTotalPrice(20) &#125;&#125;&lt;/h2&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="composition-api中的批量映射-1"><a href="#composition-api中的批量映射-1" class="headerlink" title="composition api中的批量映射"></a>composition api中的批量映射</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useStore, mapGetters &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; computed &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useGetters</span>(<span class="params">mapper</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> store = <span class="keyword">new</span> <span class="title function_">useStore</span>()</span><br><span class="line">  <span class="keyword">const</span> getterFns = <span class="title function_">mapGetters</span>(mapper)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> getter = &#123;&#125;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(getterFns).<span class="title function_">forEach</span>(<span class="function">(<span class="params">fnKey</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// mapGetters中实际上是通过 this.$store.getters获取状态</span></span><br><span class="line">    <span class="comment">// 但是目前取出的getterFns[fnKey]没有this，因此要通过bind绑定</span></span><br><span class="line">    <span class="keyword">const</span> fn = getterFns[fnKey].<span class="title function_">bind</span>(&#123; <span class="attr">$store</span>: store &#125;)</span><br><span class="line">    getter[fnKey] = <span class="title function_">computed</span>(fn)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> getter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="mutasions"><a href="#mutasions" class="headerlink" title="mutasions"></a>mutasions</h2><h3 id="基本使用-2"><a href="#基本使用-2" class="headerlink" title="基本使用"></a>基本使用</h3><p>更改 Vuex 的 store 中的状态的唯一方法是提交 mutation</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">counter</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">user</span>: &#123; <span class="attr">name</span>: <span class="string">&#x27;123&#x27;</span>, <span class="attr">age</span>: <span class="number">12</span> &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>: &#123;</span><br><span class="line">    <span class="title function_">addConuter</span>(<span class="params">state, payload = <span class="number">1</span></span>) &#123;</span><br><span class="line">      state.<span class="property">counter</span> += payload</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">redCounter</span>(<span class="params">state, payload = <span class="number">1</span></span>) &#123;</span><br><span class="line">      state.<span class="property">counter</span> -= payload</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">setUserInfo</span>(<span class="params">state, payload</span>) &#123;</span><br><span class="line">      state.<span class="property">user</span>.<span class="property">name</span> = payload.<span class="property">name</span></span><br><span class="line">      state.<span class="property">user</span>.<span class="property">age</span> = payload.<span class="property">age</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">store.<span class="title function_">commit</span>(<span class="string">&#x27;addConuter&#x27;</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">store.<span class="title function_">commit</span>(<span class="string">&#x27;setUserInfo&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">23</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 不同风格</span></span><br><span class="line">store.<span class="title function_">commit</span>(&#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&#x27;setUserInfo&#x27;</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">23</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="mapMutations"><a href="#mapMutations" class="headerlink" title="mapMutations"></a>mapMutations</h3><p>我们也可以借助于辅助函数，帮助我们快速映射到对应的方法中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mapMutations &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">const</span> mutations = <span class="title function_">mapMutations</span>([<span class="string">&#x27;addConuter&#x27;</span>, <span class="string">&#x27;redCounter&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="actions"><a href="#actions" class="headerlink" title="actions"></a>actions</h2><h3 id="基本使用-3"><a href="#基本使用-3" class="headerlink" title="基本使用"></a>基本使用</h3><p>Action类似于mutation，不同在于</p>
+<ul>
+<li>Action提交的是mutation，而不是直接变更状态</li>
+<li>Action可以包含任意异步操作</li>
+</ul>
+<p>这里有一个非常重要的参数context</p>
+<ul>
+<li>context是一个和store实例均有相同方法和属性的context对象</li>
+<li>所以我们可以从其中获取到commit方法来提交一个mutation，或者通过 context.state 和 context.getters 来获取 state 和 getters</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">counter</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">user</span>: &#123; <span class="attr">name</span>: <span class="string">&#x27;123&#x27;</span>, <span class="attr">age</span>: <span class="number">12</span> &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>: &#123;</span><br><span class="line">    <span class="title function_">ADD_COUNTER</span>(<span class="params">state, payload = <span class="number">1</span></span>) &#123;</span><br><span class="line">      state.<span class="property">counter</span> += payload</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">SET_USER_INFO</span>(<span class="params">state, payload</span>) &#123;</span><br><span class="line">      state.<span class="property">user</span>.<span class="property">name</span> = payload.<span class="property">name</span></span><br><span class="line">      state.<span class="property">user</span>.<span class="property">age</span> = payload.<span class="property">age</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span>: &#123;</span><br><span class="line">    <span class="title function_">addCounter</span>(<span class="params">context, payload</span>) &#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        context.<span class="title function_">commit</span>(<span class="string">&#x27;ADD_COUNTER&#x27;</span>, payload)</span><br><span class="line">      &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">setUserInfo</span>(<span class="params">state, payload</span>) &#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        context.<span class="title function_">commit</span>(<span class="string">&#x27;SET_USER_INFO&#x27;</span>, payload)</span><br><span class="line">      &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 执行</span></span><br><span class="line">store.<span class="title function_">dispatch</span>(<span class="string">&#x27;addCounter&#x27;</span>, <span class="number">10</span>)</span><br><span class="line">store.<span class="title function_">dispatch</span>(<span class="string">&#x27;setUserInfo&#x27;</span>, &#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">12</span>&#125;)</span><br><span class="line"><span class="comment">// 不同风格</span></span><br><span class="line">store.<span class="title function_">dispatch</span>(&#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&#x27;setUserInfo&#x27;</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">12</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="mapActions"><a href="#mapActions" class="headerlink" title="mapActions"></a>mapActions</h3><p>我们也可以借助于辅助函数，帮助我们快速映射到对应的方法中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mapActions &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">const</span> actions = <span class="title function_">mapActions</span>([<span class="string">&#x27;addConuter&#x27;</span>, <span class="string">&#x27;redCounter&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="actions中的context"><a href="#actions中的context" class="headerlink" title="actions中的context"></a>actions中的context</h3><ul>
+<li>commit: 当前模块的commit</li>
+<li>dispatch: 当前模块的dispatch</li>
+<li>getters: 当前模块的getters</li>
+<li>rootGetters: 根模块的getters</li>
+<li>rootState: 根模块的rootState</li>
+<li>state: 当前模块的state</li>
+</ul>
+<h3 id="actions异步回调"><a href="#actions异步回调" class="headerlink" title="actions异步回调"></a>actions异步回调</h3><p>Action 通常是异步的，如果我们需要知道action什么时候结束，可以通过常见异步方式解决</p>
+<p>比如返回Promise，在Promise的then中来处理完成后的操作</p>
+<h2 id="module"><a href="#module" class="headerlink" title="module"></a>module</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>由于使用单一状态树，应用的所有状态会集中到一个比较大的对象，当应用变得非常复杂时，store 对象就有可能变得相当臃肿<br>为了解决以上问题，Vuex 允许我们将 store 分割成模块（module）<br>每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块</p>
+<h3 id="基本使用-4"><a href="#基本使用-4" class="headerlink" title="基本使用"></a>基本使用</h3><p>如果想获取模块里的state时，只需要按照<code>store.state[模块名]</code>即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">counter</span>: <span class="number">0</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">modules</span>: &#123;</span><br><span class="line">    <span class="attr">user</span>: &#123;</span><br><span class="line">      <span class="attr">state</span>: &#123;</span><br><span class="line">        <span class="attr">userInfo</span>: &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">counter</span>: <span class="number">1</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.<span class="property">state</span>.<span class="property">user</span> <span class="comment">// vuex会对所有state按模块名合并在根上</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h3><p>默认情况下，模块内部的action和mutation仍然是注册在全局的命名空间中的</p>
+<ul>
+<li>这样使得多个模块能够对同一个 action 或 mutation 作出响应</li>
+<li>Getter 同样也默认注册在全局命名空间</li>
+</ul>
+<p>如果我们希望模块具有更高的封装度和复用性，可以添加 namespaced: true 的方式使其成为带命名空间的模块</p>
+<ul>
+<li>当模块被注册后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// user模块</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">namespaced</span>: <span class="literal">true</span>, <span class="comment">// 必须</span></span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">userInfo</span>: &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">counter</span>: <span class="number">1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span>: &#123;</span><br><span class="line">    <span class="title function_">getUserInfo</span>(<span class="params">state</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> state.<span class="property">userInfo</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>: &#123;</span><br><span class="line">    <span class="title function_">SET_USER_INFO</span>(<span class="params">state, payload</span>) &#123;</span><br><span class="line">      state.<span class="property">userInfo</span> = payload</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 触发</span></span><br><span class="line">store.<span class="property">getters</span>[<span class="string">&#x27;user/getUserInfo&#x27;</span>]</span><br><span class="line">store.<span class="property">commit</span>[<span class="string">&#x27;user/getUserInfo&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="辅助函数"><a href="#辅助函数" class="headerlink" title="辅助函数"></a>辅助函数</h3><p>以state为例，actions和mutations同理</p>
+<p>如果辅助函数有三种使用方法： </p>
+<ul>
+<li>通过完整的模块空间名称来查找； </li>
+<li>第一个参数传入模块空间名称，后面写上要使用的属性；</li>
+<li>通过 createNamespacedHelpers 生成一个模块的辅助函数</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 目前定义模块为 user 同上</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">computed</span>: &#123;</span><br><span class="line">      <span class="comment">// 写法1</span></span><br><span class="line">    ...<span class="title function_">mapState</span>(&#123;</span><br><span class="line">      <span class="attr">counter</span>: <span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">user</span>.<span class="property">counter</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// 写法2</span></span><br><span class="line">    ...<span class="title function_">mapState</span>(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">counter</span>: <span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">counter</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写法3</span></span><br><span class="line"><span class="keyword">import</span> &#123; createNamespacedHelpers &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"><span class="keyword">const</span> &#123; mapState &#125; = <span class="title function_">createNamespacedHelpers</span>(<span class="string">&#x27;user&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">computed</span>: &#123;</span><br><span class="line">    ...<span class="title function_">mapState</span>( &#123;</span><br><span class="line">      <span class="attr">counter</span>: <span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">counter</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="composition-api中针对module的重构"><a href="#composition-api中针对module的重构" class="headerlink" title="composition api中针对module的重构"></a>composition api中针对module的重构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">useUtil</span>(<span class="params">mapper, mapperFn</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">  <span class="keyword">const</span> stateFns = <span class="title function_">mapperFn</span>(mapper)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> state = &#123;&#125;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(stateFns).<span class="title function_">forEach</span>(<span class="function">(<span class="params">fnKey</span>) =&gt;</span> &#123;</span><br><span class="line">    state[fnKey] = <span class="title function_">computed</span>(stateFns[fnKey].<span class="title function_">bind</span>(&#123; <span class="attr">$store</span>: store &#125;))</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> state</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useState</span>(<span class="params">mapper, moduleId</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> stateFn = mapState</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> moduleId === <span class="string">&#x27;string&#x27;</span> &amp;&amp; moduleId.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    stateFn = <span class="title function_">createNamespacedHelpers</span>(moduleId).<span class="property">mapState</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">useUtil</span>(mapper, stateFn)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useGetters</span>(<span class="params">mapper, moduleId</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> getterFn = mapGetters</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> moduleId === <span class="string">&#x27;string&#x27;</span> &amp;&amp; moduleId.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    getterFn = <span class="title function_">createNamespacedHelpers</span>(moduleId).<span class="property">mapGetters</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">useUtil</span>(mapper, getterFn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/01/31/vuex/" data-id="cldjpl1ud0014j0t4491t0q2g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/01/31/js%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          js中的基本数据类型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/01/31/vue-router/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">vue-router</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/element-ui/" rel="tag">element-ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/router/" rel="tag">router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE/" rel="tag">配置</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/element-ui/" style="font-size: 10px;">element-ui</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/vue/" style="font-size: 17.5px;">vue</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 10px;">模块化</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 12.5px;">浏览器</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 15px;">源码</a> <a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 10px;">配置</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/01/31/js%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%8A%B6%E6%80%81/">js中属性描述符与对象状态</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/">事件循环</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/js%E4%B8%AD%E7%9A%84%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D/">js中的浅拷贝与深拷贝</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/%E9%89%B4%E6%9D%83%E5%92%8C%E5%9C%A8node%E4%B8%8A%E7%9A%84%E5%AE%9E%E7%8E%B0/">鉴权和在node上的实现</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/31/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%EF%BC%88GC%EF%BC%89/">垃圾回收机制（GC）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 月夜静翼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
